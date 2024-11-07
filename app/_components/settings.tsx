@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useChartParams } from "@/hooks/useApi";
-import { networks, predictors } from "@/config";
+import { networks, predictors, datasets } from "@/config";
 import { useIsFetching } from "@tanstack/react-query";
 
 const formSchema = z.object({
@@ -34,6 +34,7 @@ const formSchema = z.object({
   predictors: z.array(z.string()),
   treatment_identifier: z.string(),
   controls_identifier: z.array(z.string()),
+  dataset: z.string().default("growthepie"),
 });
 
 export function Settings() {
@@ -56,10 +57,34 @@ export function Settings() {
         <div className="flex gap-1 items-end">
           <FormField
             control={form.control}
+            name="dataset"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Dataset</FormLabel>
+                <FormControl>
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger className="w-[180px]">
+                      <SelectValue placeholder="Dataset" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {datasets.map((dataset) => (
+                        <SelectItem key={dataset.value} value={dataset.value}>
+                          {dataset.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="treatment_identifier"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>treatment</FormLabel>
+                <FormLabel>Treatment</FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="w-[180px]">
@@ -77,7 +102,7 @@ export function Settings() {
                 <FormMessage />
               </FormItem>
             )}
-          />{" "}
+          />
           <FormField
             control={form.control}
             name="dependent"
@@ -139,7 +164,7 @@ export function Settings() {
           name="controls_identifier"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>controls</FormLabel>
+              <FormLabel>Controls</FormLabel>
               <FormControl>
                 <MultiSelect
                   placeholder="Select networks..."

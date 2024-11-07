@@ -22,6 +22,7 @@ export function useChartParams() {
       // Only used by frontend
       view: parseAsString.withDefault("default"),
       smoothing: parseAsInteger.withDefault(1),
+      dataset: parseAsString.withDefault("growthepie"),
 
       months_of_training: parseAsInteger.withDefault(12),
       intervention_date: parseAsString.withDefault("2023-12-01"),
@@ -77,7 +78,11 @@ export function useApi() {
         months_of_training
       );
       const time_predictors_prior_end = subMonths(intervention_date, 2);
-      return fetch(apiUrl, {
+
+      const url = new URL(apiUrl);
+      url.searchParams.append("dataset", params.dataset);
+
+      return fetch(url, {
         method: "POST",
         body: JSON.stringify({
           time_predictors_prior_start: time_predictors_prior_start

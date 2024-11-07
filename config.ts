@@ -37,3 +37,8 @@ export const networks = [
   { label: "Scroll", value: "scroll" },
   { label: "ZKSync Era", value: "zksync_era" },
 ];
+
+export const datasets = [
+  { label: "GrowThePie", value: "growthepie" },
+  { label: "GainForest", value: "gainforest" },
+];
