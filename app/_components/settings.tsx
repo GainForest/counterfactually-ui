@@ -23,7 +23,8 @@ import {
 } from "@/components/ui/select";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { useChartParams } from "@/hooks/useApi";
-import { networks, predictors, datasets } from "@/config";
+import React from "react";
+import { datasets, networksByDataset, predictorsByDataset } from "@/config";
 import { useIsFetching } from "@tanstack/react-query";
 
 const formSchema = z.object({
@@ -46,6 +47,20 @@ export function Settings() {
 
   const isFetching = useIsFetching({ queryKey: ["api", params] });
   const treatment_identifier = form.watch("treatment_identifier");
+
+  // Watch for dataset changes
+  const currentDataset = form.watch("dataset");
+
+  // Reset dependent fields when dataset changes
+  React.useEffect(() => {
+    form.setValue("predictors", []);
+    form.setValue("treatment_identifier", "");
+    form.setValue("controls_identifier", []);
+  }, [currentDataset, form]);
+
+  const availableNetworks = networksByDataset[currentDataset as keyof typeof networksByDataset];
+  const availablePredictors = predictorsByDataset[currentDataset as keyof typeof predictorsByDataset];
+
   return (
     <Form {...form}>
       <form
@@ -91,7 +106,7 @@ export function Settings() {
                       <SelectValue placeholder="Network" />
                     </SelectTrigger>
                     <SelectContent>
-                      {networks.map((network) => (
+                      {availableNetworks.map((network) => (
                         <SelectItem key={network.value} value={network.value}>
                           {network.label}
                         </SelectItem>
@@ -115,7 +130,7 @@ export function Settings() {
                       <SelectValue placeholder="Dependent" />
                     </SelectTrigger>
                     <SelectContent>
-                      {predictors.map((predictor) => (
+                      {availablePredictors.map((predictor) => (
                         <SelectItem
                           key={predictor.value}
                           value={predictor.value}
@@ -174,7 +189,7 @@ export function Settings() {
                   onChange={(values) =>
                     field.onChange(values.map((v) => v.value))
                   }
-                  options={networks.filter(
+                  options={availableNetworks.filter(
                     (network) => network.value !== treatment_identifier
                   )}
                 />
@@ -196,7 +211,7 @@ export function Settings() {
                   onChange={(values) =>
                     field.onChange(values.map((v) => v.value))
                   }
-                  options={predictors}
+                  options={availablePredictors}
                 />
               </FormControl>
               <FormMessage />

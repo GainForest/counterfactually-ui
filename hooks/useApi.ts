@@ -1,6 +1,6 @@
 "use client";
 
-import { networks, predictors } from "@/config";
+import { predictorsByDataset, networksByDataset } from "@/config";
 import { useQuery } from "@tanstack/react-query";
 import { addMonths, subMonths } from "date-fns";
 import {
@@ -13,47 +13,25 @@ import {
 
 const apiUrl = "https://counterfactually-production.up.railway.app/synth";
 
-const networkIds = networks.map((n) => n.value);
-const predictorsIds = predictors.map((n) => n.value);
+// Get all possible predictor and network values across datasets
+const allPredictorIds = Object.values(predictorsByDataset)
+  .flatMap(predictors => predictors.map(p => p.value));
+
+const allNetworkIds = Object.values(networksByDataset)
+  .flatMap(networks => networks.map(n => n.value));
 
 export function useChartParams() {
   return useQueryStates(
     {
-      // Only used by frontend
+      dataset: parseAsString.withDefault("growthepie"),
       view: parseAsString.withDefault("default"),
       smoothing: parseAsInteger.withDefault(1),
-      dataset: parseAsString.withDefault("growthepie"),
-
       months_of_training: parseAsInteger.withDefault(12),
       intervention_date: parseAsString.withDefault("2023-12-01"),
-
-      // Sent to backend
-      dependent: parseAsStringEnum(predictorsIds).withDefault("daa"),
-      predictors: parseAsArrayOf(parseAsStringEnum(predictorsIds)).withDefault([
-        "market_cap_eth",
-        "txcount",
-        "stables_mcap",
-        "txcosts_median_eth",
-        "fees_paid_eth",
-        "gas_per_second",
-        "tvl_eth",
-        "stables_mcap_eth",
-        "fdv_eth",
-      ]),
-      treatment_identifier:
-        parseAsStringEnum(networkIds).withDefault("arbitrum"),
-      controls_identifier: parseAsArrayOf(
-        parseAsStringEnum([
-          "ethereum",
-          "polygon_zkevm",
-          "loopring",
-          "metis",
-          "scroll",
-          "zksync_era",
-          "base",
-          "optimism",
-        ])
-      ).withDefault(networkIds),
+      dependent: parseAsStringEnum(allPredictorIds).withDefault("daa"),
+      predictors: parseAsArrayOf(parseAsStringEnum(allPredictorIds)).withDefault([]),
+      treatment_identifier: parseAsStringEnum(allNetworkIds).withDefault(""),
+      controls_identifier: parseAsArrayOf(parseAsStringEnum(allNetworkIds)).withDefault([]),
     },
     { history: "replace" }
   );

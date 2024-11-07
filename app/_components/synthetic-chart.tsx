@@ -32,7 +32,7 @@ import { Button } from "@/components/ui/button";
 import { ChartSpline, TrendingUpDown } from "lucide-react";
 import { format } from "date-fns";
 import { cn, formatNumber, suffixNumber } from "@/lib/utils";
-import { networks, predictors } from "@/config";
+import { networksByDataset, predictorsByDataset } from "@/config";
 
 const chartConfig = {
   desktop: {
@@ -53,6 +53,9 @@ export function SyntheticChart() {
   const startDate = data?.data[0]?.date;
   const endDate = data?.data[data?.data.length - 1]?.date;
 
+  const currentNetworks = networksByDataset[params.dataset];
+  const currentPredictors = predictorsByDataset[params.dataset];
+
   if (error)
     return (
       <Alert variant="destructive">
@@ -70,7 +73,7 @@ export function SyntheticChart() {
           {Object.entries(data?.weights ?? {}).map(
             ([key, val], index, array) => (
               <div key={key}>
-                {networks.find((network) => network.value === key)?.label}{" "}
+                {currentNetworks.find((network) => network.value === key)?.label}{" "}
                 &times; {String(val)}
                 <span className="font-bold">
                   {index < array.length - 1 && " +"}
@@ -130,7 +133,7 @@ export function SyntheticChart() {
             </div>
           </CardTitle>
           <CardDescription>
-            {predictors.find((p) => p.value === params.dependent)?.label}
+            {currentPredictors.find((p) => p.value === params.dependent)?.label}
             {" - "}
             {startDate} - {endDate}
           </CardDescription>
@@ -200,14 +203,11 @@ export function SyntheticChart() {
                 wrapperStyle={{ fontSize: 18 }}
                 verticalAlign="top"
                 formatter={(value, entry) => {
-                  console.log(value, params);
                   return value === "treatment"
-                    ? networks.find(
-                        (network) =>
-                          network.value === params.treatment_identifier
+                    ? currentNetworks.find(
+                        (network) => network.value === params.treatment_identifier
                       )?.label
                     : value.charAt(0).toUpperCase() + value.slice(1);
-                  return "";
                 }}
               />
               <Customized
