@@ -64,7 +64,7 @@ export function SyntheticChart() {
   return (
     <div>
       <div className="mb-2 text-sm">
-        <h3 className="font-semibold">Weighted control networks</h3>
+        <h3 className="font-semibold">Weighted controls</h3>
         <div className="flex gap-2 font-mono">
           Synthetic Control ={" "}
           {Object.entries(data?.weights ?? {}).map(

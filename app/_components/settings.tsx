@@ -59,7 +59,7 @@ export function Settings() {
             name="treatment_identifier"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Treatment Network</FormLabel>
+                <FormLabel>treatment</FormLabel>
                 <FormControl>
                   <Select value={field.value} onValueChange={field.onChange}>
                     <SelectTrigger className="w-[180px]">
@@ -139,7 +139,7 @@ export function Settings() {
           name="controls_identifier"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Control Networks</FormLabel>
+              <FormLabel>controls</FormLabel>
               <FormControl>
                 <MultiSelect
                   placeholder="Select networks..."

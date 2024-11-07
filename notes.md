@@ -1,6 +1,6 @@
 ### TODO
 
-- [ ] Filter Treatment Network from Control Networks
+- [ ] Filter treatment from controls
 - [ ] Intervention Line
 - [ ] Validation for Inputs (date inputs)
 - [x] Compute button
