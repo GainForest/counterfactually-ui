@@ -29,7 +29,7 @@ export function useChartParams() {
       months_of_training: parseAsInteger.withDefault(12),
       intervention_date: parseAsString.withDefault("2023-12-01"),
       dependent: parseAsStringEnum(allPredictorIds).withDefault("daa"),
-      predictors: parseAsArrayOf(parseAsStringEnum(allPredictorIds)).withDefault([...allPredictorIds.slice(0, 28)]),
+      predictors: parseAsArrayOf(parseAsStringEnum(allPredictorIds)).withDefault([...allPredictorIds.slice(0, 20)]),
       treatment_identifier: parseAsStringEnum(allNetworkIds).withDefault(allNetworkIds[4]),
       controls_identifier: parseAsArrayOf(parseAsStringEnum(allNetworkIds)).withDefault([...allNetworkIds.slice(0, 9)]),
     },
