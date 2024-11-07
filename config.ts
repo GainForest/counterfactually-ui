@@ -1,6 +1,5 @@
 export const datasets = [
   { label: "GrowThePie", value: "growthepie" },
-  { label: "GainForest", value: "gainforest" },
 ];
 
 export const predictorsByDataset = {

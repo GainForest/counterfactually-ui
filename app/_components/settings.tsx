@@ -53,12 +53,12 @@ export function Settings() {
   // Watch for dataset changes
   const currentDataset = form.watch("dataset");
 
-  // Reset dependent fields when dataset changes
-  React.useEffect(() => {
-    form.setValue("predictors", []);
-    form.setValue("treatment_identifier", "");
-    form.setValue("controls_identifier", []);
-  }, [currentDataset, form]);
+  // // Reset dependent fields when dataset changes
+  // React.useEffect(() => {
+  //   form.setValue("predictors", []);
+  //   form.setValue("treatment_identifier", "");
+  //   form.setValue("controls_identifier", []);
+  // }, [currentDataset, form]);
 
   const availableNetworks = networksByDataset[currentDataset as keyof typeof networksByDataset];
   const availablePredictors = predictorsByDataset[currentDataset as keyof typeof predictorsByDataset];
