@@ -21,7 +21,7 @@ export function useChartParams() {
     {
       // Only used by frontend
       view: parseAsString.withDefault("default"),
-      smoothing: parseAsInteger.withDefault(30),
+      smoothing: parseAsInteger.withDefault(1),
 
       months_of_training: parseAsInteger.withDefault(12),
       intervention_date: parseAsString.withDefault("2023-12-01"),
@@ -52,7 +52,7 @@ export function useChartParams() {
           "base",
           "optimism",
         ])
-      ).withDefault(networkIds.filter((network) => network !== networkIds[1])),
+      ).withDefault(networkIds),
     },
     { history: "replace" }
   );
