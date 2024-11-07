@@ -47,6 +47,8 @@ export function Settings() {
 
   const isFetching = useIsFetching({ queryKey: ["api", params] });
   const treatment_identifier = form.watch("treatment_identifier");
+  const dependent_identifier = form.watch("dependent");
+
 
   // Watch for dataset changes
   const currentDataset = form.watch("dataset");
@@ -207,11 +209,15 @@ export function Settings() {
               <FormControl>
                 <MultiSelect
                   placeholder="Select predictors..."
-                  value={field.value}
+                  value={field.value.filter(
+                    (predictor) => predictor !== dependent_identifier
+                  )}
                   onChange={(values) =>
                     field.onChange(values.map((v) => v.value))
                   }
-                  options={availablePredictors}
+                  options={availablePredictors.filter(
+                    (predictor) => predictor.value !== dependent_identifier
+                  )}                
                 />
               </FormControl>
               <FormMessage />
